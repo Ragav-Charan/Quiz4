@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+	<body>
+		<center>
+		<header> <h1> Home </h1> </header>
+            <header> <h1> 1001626250</h1> </header>
+		<header> <h1> Venkatesan, Charan </h1> </header>
+
+            <header> <h1> Quiz 4</h1> </header>
+		<br> <br>
+		<h1> This Webpage consist of Voting records</h1>
+		<br>
+        <p> Population between 2000000 and 8000000</p>
+            <table border = 1>
+         {% for row in q1 %}
+         <tr>
+		<td>{{row}}</td>
+         </tr>
+         {% endfor %}
+      </table>
+        <p> Population between 8000000 and 40000000</p>
+            <table border = 1>
+         {% for row in q2 %}
+         <tr>
+		<td>{{row}}</td>
+         </tr>
+         {% endfor %}
+      </table>
+        <h2><a href = "/records">Scatter plot Q6 </a></h2>
+        </center>
+	</body>
+</html>
