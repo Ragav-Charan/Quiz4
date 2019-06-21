@@ -62,10 +62,11 @@ Show and submit code, when each part is complete, raise your hand and then show 
     On the same web page show the names of all states with a total population between 2 to 8 million and 
     then between 8 million and 40 million.
 
+DB Connection:
 cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 
 @app.route('/')
-def hello_world():
+def home():
     cur = cnxn.cursor()
     cur.execute("select StateName from voting WHERE TotalPop between 2000 and 8000")
     get1 = cur.fetchall()
@@ -117,6 +118,67 @@ def hello_world():
     The x axis should be horizontal, and the y vertical. 
     The axis (or all points) should be labeled with values. The user will give the population range values.
     The axis should be labeled, and the plot should occupy between 75% and 85% of the width of your display.
+
+DB Connection:
+cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
+
+app.py:
+@app.route('/records')
+def records():
+    return render_template('records.html')
+
+@app.route('/options', methods=['POST', 'GET'])
+def options():
+    p1 = int(request.form['p1']) * 1000
+    p2 = int(request.form['p2']) * 1000
+    rows = []
+    get = []
+    c = []
+    points = []
+    style = {'role':'style'}
+    annotation = {'role':'annotation'}
+    points.append(['TotalPop','Registered'])
+    cur = cnxn.cursor()
+    cur.execute("select TotalPop,Registered from voting WHERE TotalPop between ? and ?",(p1,p2))
+    get = cur.fetchall();
+    rows.append(get)
+    for row in get:
+        points.append([row[0],row[1]])
+    return render_template("list.html", p=points)
+
+list.html:
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawScatterChart);
+      function drawScatterChart() {
+          var dataset = {{ p|tojson }}
+          var data = google.visualization.arrayToDataTable(dataset);
+          var options = {
+          title: 'Total Population vs. Registered Comparision',
+          hAxis: {title: 'Total Population', minValue: 0},
+          vAxis: {title: 'Registered', minValue: 0},
+          legend: 'none'
+        };
+          var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+  <center>
+    <h1>1001626250</h1>
+    <h1>Venkatesan, Charan</h1>
+    <h1>Assignment 4</h1>
+    <p>Points : {{ p }}</p>
+    <p>Scatter Chart</p>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </center>
+  </body>
+</html>
 
  7. Show a pie chart for total population, that is, total population (in millions) in groups (ranges), that we will give you.
     (For example, if we give you 5 (million), show how many states are in the group 0 to 5 million, 5 to 10 million, 
