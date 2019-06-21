@@ -1,4 +1,5 @@
 import os
+from operator import mod
 
 import pyodbc as pyodbc
 from flask import Flask, render_template, request
@@ -78,26 +79,24 @@ def options1():
         print(points)
     return render_template("list1.html", p=points)
 
+@app.route('/records2')
+def records2():
+    return render_template('records2.html')
+
 @app.route('/options2', methods=['POST', 'GET'])
-def options1():
-    p = int(request.form['p']) * 1000
+def options2():
     rows = []
     get = []
-    c = []
+    c = {}
     points = []
-    points.append(['Total Population','State Count'])
-    cur = cnxn.cursor()
-    cur.execute("select max(TotalPop) from voting")
-    maxPop = cur.fetchone();
-    print (maxPop)
-    i = 0
-    while(i < maxPop[0] ):
-        cur.execute("select count(StateName) from voting WHERE TotalPop between ? and ?",(i,i+(p)))
-        get = cur.fetchone();
-        key = str(i)+"-"+str(i+(p))
-        points.append([key, get[0]])
-        i = i+(p)
-        print(points)
-    return render_template("list1.html", p=points)
+    p = int(request.form['p'])
+    for i in range(p):
+        lastnum = (i*i*i) % 10
+        if c.has_key(i):
+            c.update({i,i+1})
+        else:
+            c.add({i,lastnum})
+        print (c)
+    return render_template("list2.html", p=c)
 if __name__ == '__main__':
     app.run()

@@ -252,6 +252,86 @@ def options1():
     some values (in the previous example, there are no 0, 2, 3, 4... etc generated) do not show a bar.
     The bars should be labeled, and the chart should occupy between 70% and 95% of the width of your display,
     show legend (amounts) inside each bar.
+
+@app.route('/options2', methods=['POST', 'GET'])
+def options2():
+    rows = []
+    get = []
+    c = {}
+    points = []
+    p = int(request.form['p'])
+    for i in range(p):
+        lastnum = (i*i*i) % 10
+        if c.has_key(i):
+            c[i] = [i,i+1]
+        else:
+            c.append(i,lastnum)
+    return render_template("list2.html", p=c)
+
+<!doctype html>
+<html>
+	<body>
+
+		<center>
+
+		<header> <h1> Records </h1> </header>
+		<header> <h1> 1001626250</h1> </header>
+            <header> <h1> Venkatesan, Charan </h1> </header>
+            <header> <h1> Quiz 4</h1> </header>
+		<br> <br>
+		<h1> </h1>
+		<br>
+        <form action = "{{ url_for('options2') }}" method = "POST">
+		  <label>Enter Number:</label>
+          <input type = "text"
+				 name = "p"
+                  />
+		  <br>
+		  <br>
+
+		  <input type = "submit" value = "submit" /><br>
+		  </form>
+    </body>
+</html>
+
+
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {'packages':['corechart','bar']});
+      google.charts.setOnLoadCallback(drawBarChart);
+       function drawBarChart() {
+        var dataset = {{ p|tojson }}
+        var data = google.visualization.arrayToDataTable(dataset);
+        var options = {
+        title: 'Number vs. Last Digit Count',
+        hAxis: {
+          title: 'Number',
+        },
+        vAxis: {
+          title: 'Last Digit Count'
+        },
+      };
+        var chart = new google.visualization.Bar(document.getElementById('col_chart'));
+
+        chart.draw(data,options);
+      }
+    </script>
+  </head>
+  <body>
+  <center>
+    <h1>1001626250</h1>
+    <h1>Venkatesan, Charan</h1>
+    <h1>Assignment 4</h1>
+    <p>Points : {{ p }}</p>
+      <p>Bar Chart</p>
+      <div id="col_chart" style="width: 900px; height: 500px;"></div>
+  </center>
+  </body>
+</html>
+
+
  
  9. Show GTA parts 5, 6, 7, 8
 
