@@ -78,6 +78,26 @@ def options1():
         print(points)
     return render_template("list1.html", p=points)
 
-
+@app.route('/options2', methods=['POST', 'GET'])
+def options1():
+    p = int(request.form['p']) * 1000
+    rows = []
+    get = []
+    c = []
+    points = []
+    points.append(['Total Population','State Count'])
+    cur = cnxn.cursor()
+    cur.execute("select max(TotalPop) from voting")
+    maxPop = cur.fetchone();
+    print (maxPop)
+    i = 0
+    while(i < maxPop[0] ):
+        cur.execute("select count(StateName) from voting WHERE TotalPop between ? and ?",(i,i+(p)))
+        get = cur.fetchone();
+        key = str(i)+"-"+str(i+(p))
+        points.append([key, get[0]])
+        i = i+(p)
+        print(points)
+    return render_template("list1.html", p=points)
 if __name__ == '__main__':
     app.run()
