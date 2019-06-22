@@ -89,14 +89,19 @@ def options2():
     get = []
     c = {}
     points = []
+    points.append(['Number','Last Digit Count'])
     p = int(request.form['p'])
     for i in range(p):
         lastnum = (i*i*i) % 10
-        if c.has_key(i):
-            c.update({i,i+1})
+        if lastnum in c:
+            c[lastnum] = c.get(lastnum) + 1
         else:
-            c.add({i,lastnum})
-        print (c)
-    return render_template("list2.html", p=c)
+            c[lastnum] = 1
+    for i in c:
+        points.append([i,c[i]])
+    print (points)
+    return render_template("list2.html", p=points)
+
+
 if __name__ == '__main__':
     app.run()
