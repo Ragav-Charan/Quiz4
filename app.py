@@ -91,7 +91,7 @@ def options2():
     points = []
     points.append(['Number','Last Digit Count'])
     p = int(request.form['p'])
-    for i in range(p):
+    for i in range(1,p+1):
         lastnum = (i*i*i) % 10
         if lastnum in c:
             c[lastnum] = c.get(lastnum) + 1
