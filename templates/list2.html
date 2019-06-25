@@ -1,29 +1,21 @@
 <html>
   <head>
-     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawScatterChart);
+      function drawScatterChart() {
           var dataset = {{ p|tojson }}
-        var data = google.visualization.arrayToDataTable(dataset);
-
-        var options = {
-          chart: {
-            title: 'Number and Last Digit Count',
-              subtitle: 'Number and Last Digit Count',
-
-          },
-            hAxis: {
-          title: 'Last Digit Count',
-        },
-            bars: 'horizontal'
+          var data = google.visualization.arrayToDataTable(dataset);
+          var options = {
+          title: 'Number vs Last Digit Count',
+          hAxis: {title: 'Number', minValue: 0},
+          vAxis: {title: 'Last Digit Count', minValue: 0},
+          legend: 'none'
         };
+          var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
 
-        var chart = new google.charts.Bar(document.getElementById('barchart_material'));
-
-        chart.draw(data, google.charts.Bar.convertOptions(options));
+        chart.draw(data, options);
       }
     </script>
   </head>
@@ -31,10 +23,10 @@
   <center>
     <h1>1001626250</h1>
     <h1>Venkatesan, Charan</h1>
-    <h1>Quiz 4</h1>
+    <h1>Assignment 4</h1>
     <p>Points : {{ p }}</p>
-      <p>Bar Chart</p>
-      <div id="barchart_material" style="width: 900px; height: 500px;"></div>
+    <p>Scatter Chart</p>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
   </center>
   </body>
 </html>
